@@ -20,6 +20,11 @@ public class Root : MonoBehaviour
     {
         cameraController.Init();
         uiManager.Init();
+
+        foreach (var spawner in FindObjectsOfType<EntitiesSpawner>())
+        {
+            spawner.Init();
+        }
     }
 
     public static ConfigManager ConfigManager => _instance.configManager;
