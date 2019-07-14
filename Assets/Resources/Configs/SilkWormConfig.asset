@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d00aa9905040827498da5fc5b9be66ab, type: 3}
   m_Name: SilkWormConfig
   m_EditorClassIdentifier: 
-  startFullness: 1
+  startFullness: 10
   hungerSpeed: 1

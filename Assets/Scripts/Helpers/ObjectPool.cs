@@ -13,6 +13,7 @@ using System.Collections.Generic;
         private static Transform poolsContainer = null;
 
         // A pool for a particular prefab.
+        
         public class Pool
         {
             private Stack<MonoBehaviour> inactiveObjects;

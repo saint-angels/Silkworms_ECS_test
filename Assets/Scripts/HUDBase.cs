@@ -14,6 +14,7 @@ public class HUDBase : MonoBehaviour
     {
         this.owner = owner;
         owner.OnDebugInfoUpdate += SetText;
+        SetText(string.Empty);
     }
 
     private void SetText(string text)

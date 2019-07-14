@@ -8,10 +8,12 @@ using Random = UnityEngine.Random;
 
 public class EntitiesSpawner : MonoBehaviour
 {
-    [SerializeField] private EntityBase entityPrefab;
+    [SerializeField] private EntityType entityType;
 
     [SerializeField] private float spawnRadius = 3f;
     [SerializeField] private float spawnCooldown = 5f;
+    [SerializeField] private int burstSize = 1;
+    
 
     public void Init()
     {
@@ -23,15 +25,16 @@ public class EntitiesSpawner : MonoBehaviour
     {
         while (true)
         {
-            Vector3 spawnPosition = Random.insideUnitCircle * spawnRadius;
-            
-            var newEntity = ObjectPool.Spawn(entityPrefab, spawnPosition, Quaternion.identity);
-            newEntity.Init();
-            
-            
-            Root.UIManager.SetHUDForEntity(newEntity);
-            
-            
+            for (int i = 0; i < burstSize; i++)
+            {
+                EntityBase entityBase = Root.EntitiesTracker.Spawn(entityType);
+                if (entityBase != null)
+                {
+                    entityBase.transform.position = Random.insideUnitCircle * spawnRadius;
+                }
+                
+            }
+
             yield return new WaitForSeconds(spawnCooldown);
         }
     }

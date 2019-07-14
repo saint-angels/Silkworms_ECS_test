@@ -7,7 +7,9 @@ namespace Entities
     {
         public event Action<EntityBase> OnDeath = (entity) => { };
         public Action<string> OnDebugInfoUpdate = (infoString) => { };
-        
+
+        public EntityType type;
+
         public Transform HUDPoint => hudPoint;
         
         [SerializeField] private Transform hudPoint = null;
