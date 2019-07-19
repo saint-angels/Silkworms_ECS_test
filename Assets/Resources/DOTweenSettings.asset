@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 16995157, guid: 01653dc86059c6a4a87cc3783e9c8048, type: 3}
+  m_Script: {fileID: 16995157, guid: 53d5f567e1e9167488a325080f0a9d39, type: 3}
   m_Name: DOTweenSettings
   m_EditorClassIdentifier: 
   useSafeMode: 1
@@ -36,8 +36,8 @@ MonoBehaviour:
   modules:
     showPanel: 0
     audioEnabled: 1
-    physicsEnabled: 1
-    physics2DEnabled: 1
+    physicsEnabled: 0
+    physics2DEnabled: 0
     spriteEnabled: 1
     uiEnabled: 1
     textMeshProEnabled: 0

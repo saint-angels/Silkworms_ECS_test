@@ -7,11 +7,12 @@ public class ConfigManager : MonoBehaviour
     public AIConfig AI => aiConfig;
     public AnimationConfig Animation => animationConfig;
     public CameraConfig CameraConfig => cameraConfig;
-    public SilkWormConfig SilkWormConfig => silkWormConfig;
+    public EatersConfig EatersConfig => eatersConfig;
+    public FoodConfig FoodConfig => foodConfig;
 
     [SerializeField] private AIConfig aiConfig = null;
     [SerializeField] private AnimationConfig animationConfig = null;
     [SerializeField] private CameraConfig cameraConfig = null;
-    [SerializeField] private SilkWormConfig silkWormConfig = null;
-
+    [SerializeField] private EatersConfig eatersConfig = null;
+    [SerializeField] private FoodConfig foodConfig = null;
 }

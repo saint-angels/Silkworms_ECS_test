@@ -1,7 +1,6 @@
 ﻿using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
-using Entities;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,45 +11,53 @@ public class UIManager : MonoBehaviour
     
     private AnimationConfig animationCfg;
 
-
-    private readonly Dictionary<EntityBase, HUDBase> entityHuds = new Dictionary<EntityBase, HUDBase>();
-    
+    private List<HUDBase> activeHUDS = new List<HUDBase>();
     
 
     public void Init()
     {
         animationCfg = Root.ConfigManager.Animation;
-    }
-
-
-    public void SetHUDForEntity(EntityBase entity)
-    {
-        var newEntityHud = ObjectPool.Spawn(hudPrefab, Vector3.zero,  Quaternion.identity, hudContainer);
-        newEntityHud.SetOwner(entity);
         
-        entityHuds.Add(entity, newEntityHud);
-        
-        entity.OnDeath += EntityOnOnDeath;
+        ObjectPool.Preload(hudPrefab, 10);
     }
 
-    private void EntityOnOnDeath(EntityBase entity)
+    public void ShowHUDInfos(List<SystemHUDInfo.HUDInfo> hudInfos)
     {
-        entity.OnDeath -= EntityOnOnDeath;
-        ObjectPool.Despawn(entityHuds[entity]);
-        entityHuds.Remove(entity);
-    }
+        int delta = activeHUDS.Count - hudInfos.Count;
 
+        bool shouldRemoveExcess = delta > 0;
+        bool shouldAquireMore = delta < 0;
 
-    private void LateUpdate()
-    {
-        foreach (var entity in entityHuds.Keys)
+        if (shouldRemoveExcess)
         {
-            Vector2 screenPoint = Root.CameraController.WorldToScreenPoint(entity.HUDPoint.position);
+            for (int i = activeHUDS.Count - 1; i >= activeHUDS.Count - delta; i--)
+            {
+                ObjectPool.Despawn(activeHUDS[i]);
+            }
+            
+            activeHUDS.RemoveRange(activeHUDS.Count - delta, delta);
+        }
+        else if (shouldAquireMore)
+        {
+            for (int i = 0; i < Mathf.Abs(delta); i++)
+            {
+                HUDBase newHud = ObjectPool.Spawn(hudPrefab, Vector3.zero, Quaternion.identity, hudContainer);
+                activeHUDS.Add(newHud);
+            }
+        }
+
+        for (int hudInfoIdx = 0; hudInfoIdx < hudInfos.Count; hudInfoIdx++)
+        {
+            var hudInfo = hudInfos[hudInfoIdx];
+            
+            Vector2 screenPoint = Root.CameraController.WorldToScreenPoint(hudInfo.position + Vector3.up);
             Vector2 localPoint;
             if (RectTransformUtility.ScreenPointToLocalPointInRectangle(hudContainer, screenPoint, null, out localPoint))
             {
-                entityHuds[entity].transform.localPosition = localPoint;
+                activeHUDS[hudInfoIdx].transform.localPosition = localPoint;
+                activeHUDS[hudInfoIdx].SetText(hudInfo.infoString);
             }
         }
+
     }
 }
