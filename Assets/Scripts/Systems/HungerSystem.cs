@@ -7,7 +7,7 @@ using Unity.Transforms;
 using UnityEngine;
 using static Unity.Mathematics.math;
 
-public class SystemHunger : JobComponentSystem
+public class HungerSystem : JobComponentSystem
 {
     // This declares a new kind of job, which is a unit of work to do.
     // The job is declared as an IJobForEach<Translation, Rotation>,
