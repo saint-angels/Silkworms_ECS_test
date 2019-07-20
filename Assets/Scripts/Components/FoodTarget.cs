@@ -4,7 +4,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 
 [Serializable]
-public struct ComponentEater : IComponentData
+public struct FoodTarget : IComponentData
 {
     // Add fields to your component here. Remember that:
     //
@@ -20,13 +20,6 @@ public struct ComponentEater : IComponentData
     //   for runtime use here. Authoring Components will be used for 
     //   authoring the data in the Editor.
 
-
-    public float hungerSpeed;
-    public float eatSpeed;
-    public float maxFullness;
-
-    public bool isEating;
-    public float currentFullness;
-    
+    public Entity targetFoodEntity;
 
 }

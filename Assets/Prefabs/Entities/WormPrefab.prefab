@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5055141461062913540}
   - component: {fileID: 2943365018759837483}
   m_Layer: 0
-  m_Name: Worm
+  m_Name: WormPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57,7 +57,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 14253679db98dee438d0e1d523664391, type: 2}
+  - {fileID: 2100000, guid: 1eb6c6d74bd93a9469b9c98fb7786b4f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

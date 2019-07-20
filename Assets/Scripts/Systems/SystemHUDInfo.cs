@@ -21,8 +21,8 @@ public class SystemHUDInfo : ComponentSystem
         
         List<HUDInfo> hudInfos = new List<HUDInfo>(); 
         
-        Entities.WithAllReadOnly<ComponentEater>().ForEach(
-            (Entity id, ref ComponentEater componentEater, ref Translation translation) =>
+        Entities.WithAllReadOnly<Eater>().ForEach(
+            (Entity id, ref Eater componentEater, ref Translation translation) =>
             {
                 hudInfos.Add(new HUDInfo
                 {
@@ -33,8 +33,8 @@ public class SystemHUDInfo : ComponentSystem
             }
         );
         
-        Entities.WithAllReadOnly<ComponentFood>().ForEach(
-            (Entity id, ref ComponentFood componentFood, ref Translation translation) =>
+        Entities.WithAllReadOnly<Food>().ForEach(
+            (Entity id, ref Food componentFood, ref Translation translation) =>
             {
                 hudInfos.Add(new HUDInfo
                 {

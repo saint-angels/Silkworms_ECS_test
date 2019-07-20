@@ -18,7 +18,7 @@ public class SystemHunger : JobComponentSystem
     // The job is also tagged with the BurstCompile attribute, which means
     // that the Burst compiler will optimize it for the best performance.
     [BurstCompile]
-    struct SystemHungerJob : IJobForEachWithEntity<ComponentEater>
+    struct SystemHungerJob : IJobForEachWithEntity<Eater>
     {
         // Add fields here that your job needs to do its work.
         // For example,
@@ -27,7 +27,7 @@ public class SystemHunger : JobComponentSystem
         [WriteOnly]
         public EntityCommandBuffer.Concurrent CommandBuffer;
 
-        public void Execute(Entity entity, int jobIndex, ref ComponentEater eater)
+        public void Execute(Entity entity, int jobIndex, ref Eater eater)
         {
             eater.currentFullness = eater.currentFullness - deltaTime * eater.hungerSpeed;    
             

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Rendering;
 using Unity.Transforms;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -10,7 +11,8 @@ using Random = UnityEngine.Random;
 public class Spawner : MonoBehaviour
 {
     [SerializeField] private EntityType entityType;
-    [SerializeField] private GameObject Prefab;
+
+    [SerializeField] private GameObject testPrefab;
     
     [SerializeField] private float spawnRadius = 3f;
     [SerializeField] private float spawnCooldown = 5f;
@@ -18,47 +20,72 @@ public class Spawner : MonoBehaviour
 
     [SerializeField] private bool doSpawn = true;
     
-    private Entity entityPrefab;
     private EntityManager entityManager;
 
+    private EatersConfig eatersConfig;
+    private FoodConfig foodConfig;
+    private EntitiesAssets entitiesAssets;
 
     void Start()
     {
         entityManager = World.Active.EntityManager;
-        entityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(Prefab, World.Active);
+        
+        eatersConfig = Root.ConfigManager.EatersConfig;
+        foodConfig = Root.ConfigManager.FoodConfig;
+        entitiesAssets = Root.ConfigManager.EntitiesAssets;
 
-        EatersConfig eatersConfig = Root.ConfigManager.EatersConfig;
-        FoodConfig foodConfig = Root.ConfigManager.FoodConfig;
+
+        StartCoroutine(SpawnRoutine());
+    }
+
+
+
+    private void SpawnEntity(EntityType entityType, float3 position)
+    {
+        Entity newEntity = entityManager.CreateEntity(
+            typeof(Translation),
+            typeof(LocalToWorld),
+            typeof(RenderMesh),
+            typeof(Scale)
+        );
+        
+        entityManager.SetComponentData(newEntity, new Translation{ Value = position});
+        entityManager.SetComponentData(newEntity, new Scale { Value = 1f });
+
 
         switch (entityType)
         {
             case EntityType.WORM:
-                
-                var eaterData = new ComponentEater
+                entityManager.AddComponentData(newEntity, new Eater
                 {
                     hungerSpeed = eatersConfig.hungerSpeed,
                     eatSpeed = eatersConfig.eatSpeed,
                     currentFullness =  eatersConfig.maxFullness,
                     maxFullness = eatersConfig.maxFullness
-                };
+                });
+                SetEntityRenderData(newEntity, entitiesAssets.wormMaterial);
 
-                entityManager.AddComponentData(entityPrefab, eaterData);
                 break;
             case EntityType.LEAF:
-                var foodData = new ComponentFood
+                entityManager.AddComponentData(newEntity, new Food
                 {
                     foodAmount = foodConfig.maxFoodAmount
-                };
+                });    
                 
-                entityManager.AddComponentData(entityPrefab, foodData);    
+                SetEntityRenderData(newEntity, entitiesAssets.leafMaterial);
                 break;
-            default:
-                throw new ArgumentOutOfRangeException();
         }
-        
-
-        StartCoroutine(SpawnRoutine());
     }
+    
+    private void SetEntityRenderData(Entity entity, Material material) {
+        entityManager.SetSharedComponentData<RenderMesh>(entity,
+            new RenderMesh {
+                material = material,
+                mesh = entitiesAssets.quadMesh,
+            }
+        );
+    }
+    
     
     IEnumerator SpawnRoutine()
     {
@@ -68,11 +95,9 @@ public class Spawner : MonoBehaviour
             {
                 for (int i = 0; i < burstSize; i++)
                 {
-                    Entity instance = entityManager.Instantiate(entityPrefab);
                     Vector2 instancePosition = Random.insideUnitCircle * spawnRadius;
-                    
                     float3 position = transform.TransformPoint(new float3(instancePosition.x, instancePosition.y, 0));
-                    entityManager.SetComponentData(instance, new Translation {Value = position});
+                    SpawnEntity(entityType, position);
                 }    
             }
             
