@@ -10,11 +10,13 @@ public class Root : MonoBehaviour
     
     public static PlayerInput PlayerInput => _instance.playerInput;
 
-
+    public static SpawnManager SpawnManager => _instance.spawnManager;
+    
     [SerializeField] private ConfigManager configManager = null;
     [SerializeField] private CameraController cameraController = null;
     [SerializeField] private UIManager uiManager = null;
     [SerializeField] private PlayerInput playerInput = null;
+    [SerializeField] private SpawnManager spawnManager = null;
 
     private static Root _instance;
 
@@ -25,13 +27,10 @@ public class Root : MonoBehaviour
 
     private void Start()
     {
+        spawnManager.Init();
+        
         cameraController.Init();
         uiManager.Init();
-
-//        foreach (var spawner in FindObjectsOfType<EntitiesSpawner>())
-//        {
-//            spawner.Init();
-//        }
     }
 
     

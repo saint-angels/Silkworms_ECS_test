@@ -8,40 +8,29 @@ using Unity.Transforms;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class Spawner : MonoBehaviour
+public class SpawnManager : MonoBehaviour
 {
-    [SerializeField] private EntityType entityType;
-
-    [SerializeField] private GameObject testPrefab;
-    
-    [SerializeField] private float spawnRadius = 3f;
-    [SerializeField] private float spawnCooldown = 5f;
-    [SerializeField] private int burstSize = 1;
-
-    [SerializeField] private bool doSpawn = true;
-    
     private EntityManager entityManager;
 
     private EatersConfig eatersConfig;
     private FoodConfig foodConfig;
     private EntitiesAssets entitiesAssets;
+    
 
-    void Start()
+    public void Init()
     {
         entityManager = World.Active.EntityManager;
         
         eatersConfig = Root.ConfigManager.EatersConfig;
         foodConfig = Root.ConfigManager.FoodConfig;
         entitiesAssets = Root.ConfigManager.EntitiesAssets;
-
-
-        StartCoroutine(SpawnRoutine());
+        
     }
- 
 
-
-    private void SpawnEntity(EntityType entityType, float3 position)
+    public Entity SpawnEntity(EntityType entityType, Vector2 position2D)
     {
+        float3 position = new float3(position2D.x, position2D.y, 0);
+        
         Entity newEntity = entityManager.CreateEntity(
             typeof(Translation),
             typeof(LocalToWorld),
@@ -75,6 +64,8 @@ public class Spawner : MonoBehaviour
                 SetEntityRenderData(newEntity, entitiesAssets.leafMaterial);
                 break;
         }
+
+        return newEntity;
     }
     
     private void SetEntityRenderData(Entity entity, Material material) {
@@ -84,25 +75,6 @@ public class Spawner : MonoBehaviour
                 mesh = entitiesAssets.quadMesh,
             }
         );
-    }
-    
-    
-    IEnumerator SpawnRoutine()
-    {
-        while (true)
-        {
-            if (doSpawn)
-            {
-                for (int i = 0; i < burstSize; i++)
-                {
-                    Vector2 instancePosition = Random.insideUnitCircle * spawnRadius;
-                    float3 position = transform.TransformPoint(new float3(instancePosition.x, instancePosition.y, 0));
-                    SpawnEntity(entityType, position);
-                }    
-            }
-            
-            yield return new WaitForSeconds(spawnCooldown);
-        }
     }
 
 
@@ -136,11 +108,5 @@ public class Spawner : MonoBehaviour
         mesh.triangles = triangles;
 
         return mesh;
-    }
-    
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, spawnRadius);
     }
 }
