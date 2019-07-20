@@ -37,7 +37,7 @@ public class Spawner : MonoBehaviour
 
         StartCoroutine(SpawnRoutine());
     }
-
+ 
 
 
     private void SpawnEntity(EntityType entityType, float3 position)

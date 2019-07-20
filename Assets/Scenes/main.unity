@@ -519,7 +519,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1572871090}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.28, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -540,7 +540,7 @@ MonoBehaviour:
   entityType: 0
   testPrefab: {fileID: 2664710226509534641, guid: d66e5e78b868e164e8b3dc3cb37ea059,
     type: 3}
-  spawnRadius: 3
+  spawnRadius: 0
   spawnCooldown: 10
   burstSize: 1
   doSpawn: 1
@@ -575,7 +575,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entityType: 1
   testPrefab: {fileID: 0}
-  spawnRadius: 3
+  spawnRadius: 0
   spawnCooldown: 10
   burstSize: 1
   doSpawn: 1
@@ -587,7 +587,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1957054782}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.83, y: 0, z: 0}
+  m_LocalPosition: {x: -0.98, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

@@ -21,4 +21,9 @@ public struct Food : IComponentData
     //   authoring the data in the Editor.
 
     public float foodAmount;
+
+    public Food(float foodAmount)
+    {
+        this.foodAmount = foodAmount;
+    }
 }

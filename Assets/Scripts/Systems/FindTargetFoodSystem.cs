@@ -17,7 +17,7 @@ public class FindTargetFoodSystem : JobComponentSystem
     
     
     [RequireComponentTag(typeof(Eater))]
-    [ExcludeComponent(typeof(FoodTarget))]
+    [ExcludeComponent(typeof(TargetEntityFood))]
     [BurstCompile]
     struct FindTargetFoodSystemJob : IJobForEachWithEntity<Translation>
     {
@@ -49,7 +49,7 @@ public class FindTargetFoodSystem : JobComponentSystem
     }
     
     [RequireComponentTag(typeof(Eater))]
-    [ExcludeComponent(typeof(FoodTarget))]
+    [ExcludeComponent(typeof(TargetEntityFood))]
     private struct AddFoodTargetComponentJob : IJobForEachWithEntity<Translation>
     {
         [DeallocateOnJobCompletion] [ReadOnly] public NativeArray<Entity> closestFoodEntityArray;
@@ -59,7 +59,7 @@ public class FindTargetFoodSystem : JobComponentSystem
         {
             if (closestFoodEntityArray[index] != Entity.Null)
             {
-                entityCommandBuffer.AddComponent(index, entity, new FoodTarget { targetFoodEntity = closestFoodEntityArray[index] });
+                entityCommandBuffer.AddComponent(index, entity, new TargetEntityFood { foodEntity = closestFoodEntityArray[index] });
             }
         }
     }
@@ -77,14 +77,13 @@ public class FindTargetFoodSystem : JobComponentSystem
 
         foodQuery = GetEntityQuery(typeof(Food), ComponentType.ReadOnly<Translation>());
         
-        eaterQuery = GetEntityQuery(typeof(Eater), ComponentType.Exclude<FoodTarget>());
+        eaterQuery = GetEntityQuery(typeof(Eater), ComponentType.Exclude<TargetEntityFood>());
     }
 
     protected override JobHandle OnUpdate(JobHandle inputDependencies)
     {
         var job = new FindTargetFoodSystemJob();
 
-        //Do they really need tempJob? Isn't Temp enough for 1 frame calc?
         var foodEntityArray = foodQuery.ToEntityArray(Allocator.TempJob);
         var foodTranslationArray = foodQuery.ToComponentDataArray<Translation>(Allocator.TempJob);
         
@@ -116,11 +115,22 @@ public class FindTargetFoodSystem : JobComponentSystem
             entityCommandBuffer = commandBufferSystem.CreateCommandBuffer().ToConcurrent(),
         };
         jobHandle = addComponentJob.Schedule(this, jobHandle);
-        
-//        foodEntityTranslationArray.Dispose();
-        
+
         commandBufferSystem.AddJobHandleForProducer(jobHandle);
 
         return jobHandle;
     }
+}
+
+public class FoodTargetDebugSystem : ComponentSystem {
+
+    protected override void OnUpdate() {
+        Entities.ForEach((Entity entity, ref Translation translation, ref TargetEntityFood foodTarget) => {
+            if (World.Active.EntityManager.Exists(foodTarget.foodEntity)) {
+                Translation targetTranslation = World.Active.EntityManager.GetComponentData<Translation>(foodTarget.foodEntity);
+                Debug.DrawLine(translation.Value, targetTranslation.Value);
+            }
+        });
+    }
+
 }

@@ -24,8 +24,7 @@ public struct Eater : IComponentData
     public float hungerSpeed;
     public float eatSpeed;
     public float maxFullness;
-
-    public bool isEating;
+    
     public float currentFullness;
     
 

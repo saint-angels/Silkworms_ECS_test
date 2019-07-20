@@ -4,7 +4,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 
 [Serializable]
-public struct FoodTarget : IComponentData
+public struct TargetEntityFood : IComponentData
 {
     // Add fields to your component here. Remember that:
     //
@@ -20,6 +20,6 @@ public struct FoodTarget : IComponentData
     //   for runtime use here. Authoring Components will be used for 
     //   authoring the data in the Editor.
 
-    public Entity targetFoodEntity;
+    public Entity foodEntity;
 
 }
