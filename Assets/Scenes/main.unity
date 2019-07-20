@@ -479,7 +479,7 @@ MonoBehaviour:
   configManager: {fileID: 167422715}
   cameraController: {fileID: 519420030}
   uiManager: {fileID: 635342588}
-  playerInput: {fileID: 0}
+  playerInput: {fileID: 1986664721}
   spawnManager: {fileID: 1983847418}
 --- !u!4 &963158622
 Transform:
@@ -617,7 +617,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entityType: 0
-  spawnRadius: 0
+  spawnRadius: 2.68
   spawnCooldown: 10
   burstSize: 1
   doSpawn: 1
