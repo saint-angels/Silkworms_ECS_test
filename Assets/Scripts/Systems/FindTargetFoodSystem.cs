@@ -99,7 +99,7 @@ public class FindTargetFoodSystem : JobComponentSystem
         foodEntityArray.Dispose();
         foodTranslationArray.Dispose();
         
-        NativeArray<Entity> closestFoodEntitiesResult = new NativeArray<Entity>(eaterQuery.CalculateLength(), Allocator.TempJob);
+        NativeArray<Entity> closestFoodEntitiesResult = new NativeArray<Entity>(eaterQuery.CalculateEntityCount(), Allocator.TempJob);
         
 
         FindTargetFoodSystemJob findTargetFoodSystemJob = new FindTargetFoodSystemJob

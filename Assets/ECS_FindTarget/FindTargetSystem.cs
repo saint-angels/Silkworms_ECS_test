@@ -177,7 +177,7 @@ public class FindTargetJobSystem : JobComponentSystem {
         targetTranslationArray.Dispose();
         
         EntityQuery unitQuery = GetEntityQuery(typeof(Unit), ComponentType.Exclude<HasTarget>());
-        NativeArray<Entity> closestTargetEntityArray = new NativeArray<Entity>(unitQuery.CalculateLength(), Allocator.TempJob);
+        NativeArray<Entity> closestTargetEntityArray = new NativeArray<Entity>(unitQuery.CalculateEntityCount(), Allocator.TempJob);
        
 
         FindTargetBurstJob findTargetBurstJob = new FindTargetBurstJob {
