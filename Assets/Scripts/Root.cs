@@ -28,8 +28,6 @@ public class Root : MonoBehaviour
 
     private void Start()
     {
-        spawnManager.Init();
-        
         cameraController.Init();
         uiManager.Init();
     }
