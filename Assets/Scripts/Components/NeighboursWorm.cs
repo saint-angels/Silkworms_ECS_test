@@ -4,7 +4,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 
 [Serializable]
-public struct SpawnerGardenEntity : IComponentData
+public struct NeighboursWorm : IComponentData
 {
     // Add fields to your component here. Remember that:
     //
@@ -20,7 +20,6 @@ public struct SpawnerGardenEntity : IComponentData
     //   for runtime use here. Authoring Components will be used for 
     //   authoring the data in the Editor.
 
-    public Entity prefabEarth;
-    public Entity prefabWorm;
-    public Entity prefabLeaf;
+    public int Value;
+
 }

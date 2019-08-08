@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum EntityType
 {
+    EARTH,
     WORM,
     LEAF
 }

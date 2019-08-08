@@ -8,9 +8,10 @@ using UnityEngine;
 [RequiresEntityConversion]
 public class SpawnerAuthoring : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs
 {
+    public GameObject prefabEarth;
     public GameObject prefabLeaf;
     public GameObject prefabWorm;
-
+    
     // Referenced prefabs have to be declared so that the conversion system knows about them ahead of time
     public void DeclareReferencedPrefabs(List<GameObject> referencedPrefabs)
     {
@@ -22,6 +23,7 @@ public class SpawnerAuthoring : MonoBehaviour, IConvertGameObjectToEntity, IDecl
     {
         var spawnerData = new SpawnerGardenEntity
         {
+            prefabEarth = conversionSystem.GetPrimaryEntity(this.prefabEarth),
             prefabWorm = conversionSystem.GetPrimaryEntity(this.prefabWorm),
             prefabLeaf = conversionSystem.GetPrimaryEntity(this.prefabLeaf),
         };
