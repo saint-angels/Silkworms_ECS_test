@@ -22,21 +22,18 @@ public class WormNeighboursCounting : JobComponentSystem
     [BurstCompile]
     struct WormNeighbourCountingJob : IJobForEach<Translation, NeighboursWorm>
     {
-        [DeallocateOnJobCompletion] [ReadOnly]
-        public NativeArray<Translation> wormTranslations;
+        [DeallocateOnJobCompletion] [ReadOnly] public NativeArray<Translation> wormPositions;
 
         public void Execute([ReadOnly] ref Translation translation, ref NeighboursWorm neighboursWorm)
         {
             int neighbourWormsCount = 0;
-            for (int i = 0; i < wormTranslations.Length; i++)
+            for (int i = 0; i < wormPositions.Length; i++)
             {
-                Translation wormTranslation = wormTranslations[i];
-//
-//                float distanceToWorm = math.distancesq(translation.Value, wormTranslation.Value);
-//                if (distanceToWorm <= 1)
-//                {
-//                    neighbourWormsCount++;
-//                }
+                float distanceToWorm = math.distancesq(translation.Value, wormPositions[i].Value);
+                if (distanceToWorm <= 1)
+                {
+                    neighbourWormsCount++;
+                }
             }
             neighboursWorm.Value = neighbourWormsCount;
         }
@@ -46,19 +43,20 @@ public class WormNeighboursCounting : JobComponentSystem
 
     protected override void OnCreate()
     {
+        base.OnCreate();
         wormsQuery = GetEntityQuery(typeof(Worm), typeof(Translation));
     }
     
     protected override JobHandle OnUpdate(JobHandle inputDependencies)
     {
-        NativeArray<Translation> wormsArray = wormsQuery.ToComponentDataArray<Translation>(Allocator.TempJob);
+        NativeArray<Translation> wormTranslations = wormsQuery.ToComponentDataArray<Translation>(Allocator.TempJob);
 
-        var jobHandle = new WormNeighbourCountingJob
+        var job = new WormNeighbourCountingJob
         {
-            wormTranslations = wormsArray
-        }.Schedule(this, inputDependencies);
-        
-        
+            wormPositions = wormTranslations
+        };
+            
+        var jobHandle = job.Schedule(this, inputDependencies);
         return jobHandle;
     }
 }
