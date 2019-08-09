@@ -16,11 +16,11 @@ public class LeafAppearance : JobComponentSystem
     //
     // The job is also tagged with the BurstCompile attribute, which means
     // that the Burst compiler will optimize it for the best performance.
-    [BurstCompile]
+    
+    //Burst doesn't support command buffer for now
+//    [BurstCompile]
     struct LeafAppearanceJob : IJobForEachWithEntity<Translation, Earth>
     {
-        
-        
         [WriteOnly]
         public EntityCommandBuffer.Concurrent CommandBuffer;
 
@@ -54,7 +54,7 @@ public class LeafAppearance : JobComponentSystem
     {
         EntityCommandBuffer.Concurrent commandBuffer = m_Barrier.CreateCommandBuffer().ToConcurrent();
 
-        var spawnerArray = spawnerQuery.ToComponentDataArray<SpawnerGardenEntity>(Allocator.TempJob);
+        NativeArray<SpawnerGardenEntity> spawnerArray = spawnerQuery.ToComponentDataArray<SpawnerGardenEntity>(Allocator.TempJob);
         var spawner = spawnerArray[0];
         
         var jobHandle = new LeafAppearanceJob
