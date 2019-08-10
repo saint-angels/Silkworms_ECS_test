@@ -8,7 +8,7 @@ using UnityEngine;
 using static Unity.Mathematics.math;
 using Random = Unity.Mathematics.Random;
 
-public abstract class NeighbourCounting<T1, T2> : JobComponentSystem
+public abstract class NeighbourCounting<T1, T2> : JobSystemDelayed
     where T1 : struct, ComponentWithValue
     where T2 : struct, IComponentData
 {
@@ -42,8 +42,8 @@ public abstract class NeighbourCounting<T1, T2> : JobComponentSystem
         base.OnCreate();
         targetNeighbourQuery = GetEntityQuery(typeof(T2), typeof(Translation));
     }
-    
-    protected override JobHandle OnUpdate(JobHandle inputDependencies)
+
+    protected override JobHandle DelayedUpdate(JobHandle inputDependencies)
     {
         NativeArray<Translation> targetComponetPositions = targetNeighbourQuery.ToComponentDataArray<Translation>(Allocator.TempJob);
 
@@ -54,6 +54,6 @@ public abstract class NeighbourCounting<T1, T2> : JobComponentSystem
         };
             
         var jobHandle = job.Schedule(this, inputDependencies);
-        return jobHandle;
+        return jobHandle;   
     }
 }

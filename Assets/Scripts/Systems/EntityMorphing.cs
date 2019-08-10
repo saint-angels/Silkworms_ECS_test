@@ -6,7 +6,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using static Unity.Mathematics.math;
 
-public abstract class EntityMorphing<T1> : JobComponentSystem
+public abstract class EntityMorphing<T1> : JobSystemDelayed
     where T1 : struct, IComponentData
 {
 //    [BurstCompile]
@@ -44,7 +44,7 @@ public abstract class EntityMorphing<T1> : JobComponentSystem
         spawnerQuery = GetEntityQuery(typeof(SpawnerGardenEntity));
     }
 
-    protected override JobHandle OnUpdate(JobHandle inputDependencies)
+    protected override JobHandle DelayedUpdate(JobHandle inputDependencies)
     {
         EntityCommandBuffer.Concurrent commandBuffer = m_Barrier.CreateCommandBuffer().ToConcurrent();
 
@@ -68,7 +68,7 @@ public abstract class EntityMorphing<T1> : JobComponentSystem
     }
 }
 
-public abstract class EntityMorphing<T1, T2> : JobComponentSystem
+public abstract class EntityMorphing<T1, T2> : JobSystemDelayed
     where T1 : struct, IComponentData
     where T2 : struct, ComponentWithValue
 {
@@ -77,7 +77,8 @@ public abstract class EntityMorphing<T1, T2> : JobComponentSystem
     {
         [ReadOnly] public Random random;
         [ReadOnly] public float morphChance;
-        [ReadOnly] public int conditionRequired;
+        [ReadOnly] public int conditionMoreThan;
+        [ReadOnly] public int conditionLessThan;
         
         [WriteOnly] public EntityCommandBuffer.Concurrent CommandBuffer;
         public SpawnerGardenEntity spawner;
@@ -85,7 +86,8 @@ public abstract class EntityMorphing<T1, T2> : JobComponentSystem
 
         public void Execute(Entity entity, int index, ref Translation translation, [ReadOnly] ref T1 originComponent, [ReadOnly] ref T2 counterComponent)
         {
-            bool canMorph = conditionRequired <= counterComponent.Value && random.NextFloat() < morphChance;
+            bool canMorph = conditionMoreThan <= counterComponent.Value && counterComponent.Value <= conditionLessThan
+                            && random.NextFloat() < morphChance;
             if (canMorph)
             {
                 CommandBuffer.DestroyEntity(index, entity);
@@ -99,7 +101,8 @@ public abstract class EntityMorphing<T1, T2> : JobComponentSystem
 
     protected abstract EntityType targetEntityType { get; }
     protected abstract float MorphChance { get; }
-    protected abstract int ConditionRequired { get; }
+    protected virtual int ConditionMoreThan => int.MinValue;
+    protected virtual int ConditionLessThan => int.MaxValue;
     
     private EntityCommandBufferSystem m_Barrier;
     private EntityQuery spawnerQuery;
@@ -110,7 +113,7 @@ public abstract class EntityMorphing<T1, T2> : JobComponentSystem
         spawnerQuery = GetEntityQuery(typeof(SpawnerGardenEntity));
     }
 
-    protected override JobHandle OnUpdate(JobHandle inputDependencies)
+    protected override JobHandle DelayedUpdate(JobHandle inputDependencies)
     {
         EntityCommandBuffer.Concurrent commandBuffer = m_Barrier.CreateCommandBuffer().ToConcurrent();
 
@@ -124,7 +127,8 @@ public abstract class EntityMorphing<T1, T2> : JobComponentSystem
             random = new Random((uint)(UnityEngine.Random.value * 100 + 1)),
             targetEntityType = targetEntityType,
             morphChance = MorphChance,
-            conditionRequired = ConditionRequired
+            conditionMoreThan = ConditionMoreThan,
+            conditionLessThan = ConditionLessThan
         }.Schedule(this, inputDependencies);
         
         m_Barrier.AddJobHandleForProducer(jobHandle);
