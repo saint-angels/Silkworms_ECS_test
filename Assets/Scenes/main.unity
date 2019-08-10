@@ -479,6 +479,7 @@ MonoBehaviour:
   cameraController: {fileID: 519420030}
   uiManager: {fileID: 635342588}
   playerInput: {fileID: 1986664721}
+  simulationTick: 0.5
 --- !u!4 &963158622
 Transform:
   m_ObjectHideFlags: 0
@@ -585,8 +586,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e12157a43b2384a46959fd70dde38289, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 100
-  height: 100
+  width: 50
+  height: 50
   cellScale: 1
   gameobjectsPrefabs:
   - {fileID: 1116066790105170144, guid: 7c467f8b4c31c234e89b8b82d9d9c42b, type: 3}

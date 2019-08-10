@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Root : MonoBehaviour
 {
+    public static float SimulationTick => _instance.simulationTick;
+
     public static ConfigManager ConfigManager => _instance.configManager;
     public static CameraController CameraController => _instance.cameraController;
     public static UIManager UIManager => _instance.uiManager;
@@ -16,6 +18,8 @@ public class Root : MonoBehaviour
     [SerializeField] private CameraController cameraController = null;
     [SerializeField] private UIManager uiManager = null;
     [SerializeField] private PlayerInput playerInput = null;
+    [Range(0f, 10f)]
+    [SerializeField] private float simulationTick = .5f;
         
     private static Root _instance;
 

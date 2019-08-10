@@ -8,14 +8,13 @@ using static Unity.Mathematics.math;
 
 public abstract class JobSystemDelayed : JobComponentSystem
 {
-    float tickDuration = 1f;
     float currentCooldown;
     
     protected override JobHandle OnUpdate(JobHandle inputDependencies)
     {
         if (currentCooldown <= 0)
         {
-            currentCooldown = tickDuration;
+            currentCooldown = Root.SimulationTick;
             return DelayedUpdate(inputDependencies);
         }
         else
