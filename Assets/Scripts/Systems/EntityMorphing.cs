@@ -12,23 +12,16 @@ public abstract class EntityMorphing<T1> : JobComponentSystem
 //    [BurstCompile]
     struct EntityMorphingJob : IJobForEachWithEntity<Translation, T1>
     {
-        [WriteOnly]
-        public EntityCommandBuffer.Concurrent CommandBuffer;
+        [ReadOnly] public Random random;
+        [ReadOnly] public float morphChance;
         
-        [ReadOnly]
-        public float morphChance;
-        
+        [WriteOnly] public EntityCommandBuffer.Concurrent CommandBuffer;
         public SpawnerGardenEntity spawner;
-        
-        [ReadOnly] 
-        public Random random;
-
         [ReadOnly] public EntityType targetEntityType;
-        
 
         public void Execute(Entity entity, int index, ref Translation translation, [ReadOnly] ref T1 originComponent)
         {
-            if (random.NextFloat() < .01f)
+            if (random.NextFloat() < morphChance)
             {
                 CommandBuffer.DestroyEntity(index, entity);
 
@@ -40,6 +33,7 @@ public abstract class EntityMorphing<T1> : JobComponentSystem
     }
 
     protected abstract EntityType targetEntityType { get; }
+    protected abstract float MorphChance { get; }
     
     private EntityCommandBufferSystem m_Barrier;
     private EntityQuery spawnerQuery;
@@ -62,7 +56,8 @@ public abstract class EntityMorphing<T1> : JobComponentSystem
             CommandBuffer = commandBuffer,
             spawner = spawner,
             random = new Random((uint)(UnityEngine.Random.value * 100 + 1)),
-            targetEntityType = targetEntityType
+            targetEntityType = targetEntityType,
+            morphChance = MorphChance
         }.Schedule(this, inputDependencies);
         
         m_Barrier.AddJobHandleForProducer(jobHandle);
