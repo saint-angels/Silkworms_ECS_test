@@ -4,7 +4,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 
 [Serializable]
-public struct SpawnerGardenEntity : IComponentData
+public struct NeighboursLeaf : IComponentData
 {
     // Add fields to your component here. Remember that:
     //
@@ -20,22 +20,6 @@ public struct SpawnerGardenEntity : IComponentData
     //   for runtime use here. Authoring Components will be used for 
     //   authoring the data in the Editor.
 
-    public Entity prefabEarth;
-    public Entity prefabWorm;
-    public Entity prefabLeaf;
+    public int Value;
 
-    public Entity GetEntityForType(EntityType type)
-    {
-        switch (type)
-        {
-            case EntityType.EARTH:
-                return prefabEarth;
-            case EntityType.WORM:
-                return prefabWorm;
-            case EntityType.LEAF:
-                return prefabLeaf;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(type), type, null);
-        }
-    }
 }

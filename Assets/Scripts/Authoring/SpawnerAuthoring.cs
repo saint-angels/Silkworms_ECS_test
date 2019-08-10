@@ -17,18 +17,18 @@ public class SpawnerAuthoring : MonoBehaviour, IConvertGameObjectToEntity, IDecl
     {
         referencedPrefabs.Add(prefabLeaf);
         referencedPrefabs.Add(prefabWorm);
+        referencedPrefabs.Add(prefabEarth);
     }
     
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
     {
         var spawnerData = new SpawnerGardenEntity
         {
-            prefabEarth = conversionSystem.GetPrimaryEntity(this.prefabEarth),
-            prefabWorm = conversionSystem.GetPrimaryEntity(this.prefabWorm),
-            prefabLeaf = conversionSystem.GetPrimaryEntity(this.prefabLeaf),
+            prefabEarth = conversionSystem.GetPrimaryEntity(prefabEarth),
+            prefabWorm = conversionSystem.GetPrimaryEntity(prefabWorm),
+            prefabLeaf = conversionSystem.GetPrimaryEntity(prefabLeaf),
         };
-        
-        
+
         dstManager.AddComponentData(entity, spawnerData);
     }
 }

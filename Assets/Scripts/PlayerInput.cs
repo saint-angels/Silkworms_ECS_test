@@ -12,7 +12,7 @@ public class PlayerInput : MonoBehaviour
 
     public Vector2? directionPressed = null;
     
-    [SerializeField] private SpawnerManual spawner = null;
+//    [SerializeField] private SpawnerManual spawner = null;
     
     private enum Direction
     {

@@ -11,14 +11,12 @@ public class Root : MonoBehaviour
     
     public static PlayerInput PlayerInput => _instance.playerInput;
 
-    public static SpawnManager SpawnManager => _instance.spawnManager;
-    
+   
     [SerializeField] private ConfigManager configManager = null;
     [SerializeField] private CameraController cameraController = null;
     [SerializeField] private UIManager uiManager = null;
     [SerializeField] private PlayerInput playerInput = null;
-    [SerializeField] private SpawnManager spawnManager = null;
-
+        
     private static Root _instance;
 
     private void Awake()

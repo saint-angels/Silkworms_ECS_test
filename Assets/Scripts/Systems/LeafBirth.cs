@@ -6,7 +6,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using static Unity.Mathematics.math;
 
-public class LeafAppearance : JobComponentSystem
+public class LeafBirth : JobComponentSystem
 {
     // This declares a new kind of job, which is a unit of work to do.
     // The job is declared as an IJobForEach<Translation, Rotation>,
@@ -19,7 +19,9 @@ public class LeafAppearance : JobComponentSystem
     
     //Burst doesn't support command buffer for now
 //    [BurstCompile]
-    struct LeafAppearanceJob : IJobForEachWithEntity<Translation, Earth>
+    [RequireComponentTag(typeof(Earth))]
+
+    struct LeafBirthJob : IJobForEachWithEntity<Translation>
     {
         [WriteOnly]
         public EntityCommandBuffer.Concurrent CommandBuffer;
@@ -29,7 +31,7 @@ public class LeafAppearance : JobComponentSystem
 
         public SpawnerGardenEntity spawner;
         
-        public void Execute(Entity entity, int index, ref Translation translation, [ReadOnly] ref Earth c1)
+        public void Execute(Entity entity, int index, ref Translation translation)
         {
             if (random.NextFloat() < .01f)
             {
@@ -52,12 +54,14 @@ public class LeafAppearance : JobComponentSystem
     
     protected override JobHandle OnUpdate(JobHandle inputDependencies)
     {
+        return inputDependencies;
+        
         EntityCommandBuffer.Concurrent commandBuffer = m_Barrier.CreateCommandBuffer().ToConcurrent();
 
         NativeArray<SpawnerGardenEntity> spawnerArray = spawnerQuery.ToComponentDataArray<SpawnerGardenEntity>(Allocator.TempJob);
         var spawner = spawnerArray[0];
         
-        var jobHandle = new LeafAppearanceJob
+        var jobHandle = new LeafBirthJob
         {
             CommandBuffer = commandBuffer,
             random =new Random((uint)(UnityEngine.Random.value * 100 + 1)),

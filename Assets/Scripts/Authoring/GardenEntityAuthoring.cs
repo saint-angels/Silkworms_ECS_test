@@ -13,6 +13,7 @@ public class GardenEntityAuthoring : MonoBehaviour, IConvertGameObjectToEntity
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
     {
         dstManager.AddComponentData(entity, new NeighboursWorm());
+        dstManager.AddComponentData(entity, new NeighboursLeaf());
         
         switch (entityType)
         {

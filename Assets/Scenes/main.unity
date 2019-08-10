@@ -168,7 +168,6 @@ MonoBehaviour:
   cameraConfig: {fileID: 11400000, guid: 2eac46532e22748468c5665ec8b4c484, type: 2}
   eatersConfig: {fileID: 11400000, guid: 4a591511a5d3afb43b8ea0235e66406d, type: 2}
   foodConfig: {fileID: 11400000, guid: d4136d3969db38240a5f6502f3240a75, type: 2}
-  entitiesAssets: {fileID: 11400000, guid: 41985672df0813f4f924d6c0b6181b50, type: 2}
 --- !u!1 &355002152
 GameObject:
   m_ObjectHideFlags: 0
@@ -480,7 +479,6 @@ MonoBehaviour:
   cameraController: {fileID: 519420030}
   uiManager: {fileID: 635342588}
   playerInput: {fileID: 1986664721}
-  spawnManager: {fileID: 0}
 --- !u!4 &963158622
 Transform:
   m_ObjectHideFlags: 0
@@ -552,7 +550,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7af7192fb7c71f34aa2f38e34b0e051b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabEarth: {fileID: 0}
+  prefabEarth: {fileID: 1116066790105170144, guid: 7c467f8b4c31c234e89b8b82d9d9c42b,
+    type: 3}
   prefabLeaf: {fileID: 7052534408137915798, guid: bc6511f9f135bc240b3adfeb9d977ac6,
     type: 3}
   prefabWorm: {fileID: 2664710226509534641, guid: d66e5e78b868e164e8b3dc3cb37ea059,
@@ -586,8 +585,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e12157a43b2384a46959fd70dde38289, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 150
-  height: 150
+  width: 100
+  height: 100
   cellScale: 1
   gameobjectsPrefabs:
   - {fileID: 1116066790105170144, guid: 7c467f8b4c31c234e89b8b82d9d9c42b, type: 3}
@@ -636,7 +635,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca03d4e6a5c0c4d4d8b2cb1b6b470b87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawner: {fileID: 0}
 --- !u!4 &1986664722
 Transform:
   m_ObjectHideFlags: 0
