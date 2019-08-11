@@ -16,7 +16,6 @@ public abstract class NeighbourCounting<T1, T2> : JobSystemDelayed
     struct NeighbourCountingJob : IJobForEach<GridPosition, T1>
     {
         [ReadOnly] public NativeHashMap<int2, bool> gridEntities;
-        [ReadOnly] public float requiredDistanceSq; 
         
         public void Execute([ReadOnly] ref GridPosition gridPosition, ref T1 neighboursCounter)
         {
@@ -37,8 +36,7 @@ public abstract class NeighbourCounting<T1, T2> : JobSystemDelayed
             neighboursCounter.Value = neighbourCount;
         }
     }
-    protected abstract float RequiredDistanceSq { get; }
-
+    
     private EntityQuery targetNeighbourQuery;
 
     protected override void OnCreate()
@@ -50,7 +48,7 @@ public abstract class NeighbourCounting<T1, T2> : JobSystemDelayed
     protected override JobHandle DelayedUpdate(JobHandle inputDependencies)
     {
         NativeArray<GridPosition> gridEntityPositions = targetNeighbourQuery.ToComponentDataArray<GridPosition>(Allocator.TempJob);
-        
+
         NativeHashMap<int2, bool> targetComponetPositions = new NativeHashMap<int2, bool>(targetNeighbourQuery.CalculateEntityCount(), Allocator.TempJob);
 
         for (int i = 0; i < gridEntityPositions.Length; i++)
@@ -59,15 +57,14 @@ public abstract class NeighbourCounting<T1, T2> : JobSystemDelayed
         }
         
 
-        var job = new NeighbourCountingJob
+        var neighbourCountingJob = new NeighbourCountingJob
         {
             gridEntities = targetComponetPositions,
-            requiredDistanceSq = RequiredDistanceSq
         };
         
         gridEntityPositions.Dispose();
 
-        var jobHandle = job.Schedule(this, inputDependencies);
+        var jobHandle = neighbourCountingJob.Schedule(this, inputDependencies);
 
         return targetComponetPositions.Dispose(jobHandle);;   
     }
