@@ -6,9 +6,10 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using static Unity.Mathematics.math;
 
-public class LeafDeath : EntityMorphing<Leaf, NeighboursWorm>
+[UpdateBefore(typeof(LeafEating))]
+public class WormEating : EntityMorphingX<Worm, NeighboursLeaf>
 {
     protected override EntityType targetEntityType => EntityType.EARTH;
-    protected override float MorphChance => .5f;
-    protected override int ConditionMoreThan => 1;
+    protected override int Multiplier => 3;
+    
 }

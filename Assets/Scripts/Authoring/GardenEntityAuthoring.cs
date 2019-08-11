@@ -22,10 +22,10 @@ public class GardenEntityAuthoring : MonoBehaviour, IConvertGameObjectToEntity
                 dstManager.AddComponentData(entity, new Earth());
                 break;
             case EntityType.WORM:
-                dstManager.AddComponentData(entity, new Worm());
+                dstManager.AddComponentData(entity, new Worm{ Value = 100});
                 break;
             case EntityType.LEAF:
-                dstManager.AddComponentData(entity, new Leaf());
+                dstManager.AddComponentData(entity, new Leaf {Value = 100});
                 break;
         }
     }

@@ -889,10 +889,12 @@ MonoBehaviour:
   width: 100
   height: 100
   cellScale: 1
-  gameobjectsPrefabs:
-  - {fileID: 1116066790105170144, guid: 7c467f8b4c31c234e89b8b82d9d9c42b, type: 3}
-  - {fileID: 7052534408137915798, guid: bc6511f9f135bc240b3adfeb9d977ac6, type: 3}
-  - {fileID: 2664710226509534641, guid: d66e5e78b868e164e8b3dc3cb37ea059, type: 3}
+  earthPrefab: {fileID: 1116066790105170144, guid: 7c467f8b4c31c234e89b8b82d9d9c42b,
+    type: 3}
+  leafPrefab: {fileID: 7052534408137915798, guid: bc6511f9f135bc240b3adfeb9d977ac6,
+    type: 3}
+  wormPrefab: {fileID: 2664710226509534641, guid: d66e5e78b868e164e8b3dc3cb37ea059,
+    type: 3}
 --- !u!4 &1506788176
 Transform:
   m_ObjectHideFlags: 0
