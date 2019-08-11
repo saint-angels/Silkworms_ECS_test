@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CountingNeighbourWorms : NeighbourCounting<NeighboursWorm, Worm>
+public class CountingNeighbourWorms : NeighbourCounting2<NeighboursWorm, Worm>
 {
     protected override float RequiredDistanceSq => requiredDistanceSq;
 

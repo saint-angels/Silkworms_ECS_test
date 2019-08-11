@@ -45,6 +45,7 @@ public class GardenCreator : MonoBehaviour
                 var randomPrefab = entitiesPrefabs[UnityEngine.Random.Range(0, entitiesPrefabs.Length)];
                 
                 var instance = entityManager.Instantiate(randomPrefab);
+                entityManager.SetComponentData(instance, new GridPosition { Value = new int2(x, y)});
                 entityManager.SetComponentData(instance, new Translation {Value = position});
             }
         }

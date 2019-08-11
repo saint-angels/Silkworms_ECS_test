@@ -45,6 +45,7 @@ public abstract class NeighbourCounting<T1, T2> : JobSystemDelayed
 
     protected override JobHandle DelayedUpdate(JobHandle inputDependencies)
     {
+        return inputDependencies;
         NativeArray<Translation> targetComponetPositions = targetNeighbourQuery.ToComponentDataArray<Translation>(Allocator.TempJob);
 
         var job = new NeighbourCountingJob

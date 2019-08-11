@@ -14,6 +14,7 @@ public class GardenEntityAuthoring : MonoBehaviour, IConvertGameObjectToEntity
     {
         dstManager.AddComponentData(entity, new NeighboursWorm());
         dstManager.AddComponentData(entity, new NeighboursLeaf());
+        dstManager.AddComponent<GridPosition>(entity);
         
         switch (entityType)
         {

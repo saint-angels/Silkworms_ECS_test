@@ -1,12 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    [System.Serializable]
+    public struct EntityCounterSetting
+    {
+        public EntityType type;
+        public TMPro.TextMeshProUGUI textCounter;
+    }
+    
     [SerializeField] private RectTransform hudContainer = null;
     [SerializeField] private HUDBase hudPrefab;
+    [SerializeField] private EntityCounterSetting[] counterSettings;
     
     private AnimationConfig animationCfg;
 
@@ -58,5 +67,28 @@ public class UIManager : MonoBehaviour
             }
         }
 
+    }
+
+    public void UpdateEntityCounter(EntityType type, int count)
+    {
+        TextMeshProUGUI label = GetLabelForEntityType(type);
+        if (label != null)
+        {
+            label.text = $"{count}";
+        }
+    }
+    
+    private TMPro.TextMeshProUGUI GetLabelForEntityType(EntityType entityType)
+    {
+        for (int i = 0; i < counterSettings.Length; i++)
+        {
+            if (counterSettings[i].type == entityType)
+            {
+                return counterSettings[i].textCounter;
+            }
+        }
+        
+        Debug.LogError($"Can't find counter for type {entityType}");
+        return null;
     }
 }

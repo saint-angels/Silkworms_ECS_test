@@ -10,7 +10,7 @@ public abstract class EntityMorphing<T1> : JobSystemDelayed
     where T1 : struct, IComponentData
 {
 //    [BurstCompile]
-    struct EntityMorphingJob : IJobForEachWithEntity<Translation, T1>
+    struct EntityMorphingJob : IJobForEachWithEntity<Translation, GridPosition, T1>
     {
         [ReadOnly] public Random random;
         [ReadOnly] public float morphChance;
@@ -19,7 +19,7 @@ public abstract class EntityMorphing<T1> : JobSystemDelayed
         public SpawnerGardenEntity spawner;
         [ReadOnly] public EntityType targetEntityType;
 
-        public void Execute(Entity entity, int index, ref Translation translation, [ReadOnly] ref T1 originComponent)
+        public void Execute(Entity entity, int index, [ReadOnly] ref Translation translation, [ReadOnly] ref GridPosition gridPosition, [ReadOnly] ref T1 originComponent)
         {
             if (random.NextFloat() < morphChance)
             {
@@ -28,6 +28,7 @@ public abstract class EntityMorphing<T1> : JobSystemDelayed
                 Entity targetPrefab = spawner.GetEntityForType(targetEntityType);
                 Entity newEntity = CommandBuffer.Instantiate(index, targetPrefab);
                 CommandBuffer.SetComponent(index, newEntity, new Translation { Value = translation.Value });
+                CommandBuffer.SetComponent(index, newEntity, new GridPosition { Value = gridPosition.Value });
             }
         }
     }
@@ -73,7 +74,7 @@ public abstract class EntityMorphing<T1, T2> : JobSystemDelayed
     where T2 : struct, ComponentWithValue
 {
 //    [BurstCompile]
-    struct EntityMorphingJob : IJobForEachWithEntity<Translation, T1, T2>
+    struct EntityMorphingJob : IJobForEachWithEntity<Translation, GridPosition, T1, T2>
     {
         [ReadOnly] public Random random;
         [ReadOnly] public float morphChance;
@@ -84,7 +85,7 @@ public abstract class EntityMorphing<T1, T2> : JobSystemDelayed
         public SpawnerGardenEntity spawner;
         [ReadOnly] public EntityType targetEntityType;
 
-        public void Execute(Entity entity, int index, ref Translation translation, [ReadOnly] ref T1 originComponent, [ReadOnly] ref T2 counterComponent)
+        public void Execute(Entity entity, int index, [ReadOnly] ref Translation translation, [ReadOnly] ref GridPosition gridPosition, [ReadOnly] ref T1 originComponent, [ReadOnly] ref T2 counterComponent)
         {
             bool canMorph = conditionMoreThan <= counterComponent.Value && counterComponent.Value <= conditionLessThan
                             && random.NextFloat() < morphChance;
@@ -95,6 +96,7 @@ public abstract class EntityMorphing<T1, T2> : JobSystemDelayed
                 Entity targetPrefab = spawner.GetEntityForType(targetEntityType);
                 Entity newEntity = CommandBuffer.Instantiate(index, targetPrefab);
                 CommandBuffer.SetComponent(index, newEntity, new Translation { Value = translation.Value });
+                CommandBuffer.SetComponent(index, newEntity, new GridPosition { Value = gridPosition.Value });
             }
         }
     }
