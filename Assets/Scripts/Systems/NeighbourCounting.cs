@@ -13,23 +13,27 @@ public abstract class NeighbourCounting<T1, T2> : JobSystemDelayed
     where T2 : struct, IComponentData
 {
     [BurstCompile]
-    struct NeighbourCountingJob : IJobForEach<Translation, T1>
+    struct NeighbourCountingJob : IJobForEach<GridPosition, T1>
     {
-        [DeallocateOnJobCompletion] [ReadOnly] public NativeArray<Translation> targetComponentPositions;
+        [ReadOnly] public NativeHashMap<int2, bool> gridEntities;
         [ReadOnly] public float requiredDistanceSq; 
         
-        public void Execute([ReadOnly] ref Translation translation, ref T1 neighboursCounter)
+        public void Execute([ReadOnly] ref GridPosition gridPosition, ref T1 neighboursCounter)
         {
             int neighbourCount = 0;
-            for (int i = 0; i < targetComponentPositions.Length; i++)
+
+            for (int x = gridPosition.Value.x - 1; x <= gridPosition.Value.x + 1; x++)
             {
-                float distanceToTarget = math.distancesq(translation.Value, targetComponentPositions[i].Value);
-                if (distanceToTarget <= requiredDistanceSq)
+                for (int y = gridPosition.Value.y - 1; y <= gridPosition.Value.y + 1; y++)
                 {
-                    neighbourCount++;
+                    bool neighbourPresent;
+                    if (gridEntities.TryGetValue(new int2(x, y), out neighbourPresent))
+                    {
+                        neighbourCount++;
+                    }
                 }
             }
-            
+
             neighboursCounter.Value = neighbourCount;
         }
     }
@@ -40,21 +44,31 @@ public abstract class NeighbourCounting<T1, T2> : JobSystemDelayed
     protected override void OnCreate()
     {
         base.OnCreate();
-        targetNeighbourQuery = GetEntityQuery(typeof(T2), typeof(Translation));
+        targetNeighbourQuery = GetEntityQuery(typeof(T2), typeof(GridPosition));
     }
 
     protected override JobHandle DelayedUpdate(JobHandle inputDependencies)
     {
-        return inputDependencies;
-        NativeArray<Translation> targetComponetPositions = targetNeighbourQuery.ToComponentDataArray<Translation>(Allocator.TempJob);
+        NativeArray<GridPosition> gridEntityPositions = targetNeighbourQuery.ToComponentDataArray<GridPosition>(Allocator.TempJob);
+        
+        NativeHashMap<int2, bool> targetComponetPositions = new NativeHashMap<int2, bool>(targetNeighbourQuery.CalculateEntityCount(), Allocator.TempJob);
+
+        for (int i = 0; i < gridEntityPositions.Length; i++)
+        {
+            targetComponetPositions.TryAdd(gridEntityPositions[i].Value, true);
+        }
+        
 
         var job = new NeighbourCountingJob
         {
-            targetComponentPositions = targetComponetPositions,
+            gridEntities = targetComponetPositions,
             requiredDistanceSq = RequiredDistanceSq
         };
-            
+        
+        gridEntityPositions.Dispose();
+
         var jobHandle = job.Schedule(this, inputDependencies);
-        return jobHandle;   
+
+        return targetComponetPositions.Dispose(jobHandle);;   
     }
 }
