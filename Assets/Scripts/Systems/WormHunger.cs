@@ -23,7 +23,7 @@ public class WormHunger : JobSystemDelayed
     {
         var job = new WormHungerJob
         {
-            hungerAmount = 10
+            hungerAmount = 20
         };
 
         return job.Schedule(this, inputDependencies);

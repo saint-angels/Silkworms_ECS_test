@@ -32,19 +32,7 @@ public class SystemHUDInfo : ComponentSystem
 
             }
         );
-        
-        Entities.WithAllReadOnly<Food>().ForEach(
-            (Entity id, ref Food componentFood, ref Translation translation) =>
-            {
-                hudInfos.Add(new HUDInfo
-                {
-                    position = translation.Value,
-                    infoString = $"{componentFood.foodAmount:0.#}"
-                });
 
-            }
-        );
-        
         Root.UIManager.ShowHUDInfos(hudInfos);
     }
 }
