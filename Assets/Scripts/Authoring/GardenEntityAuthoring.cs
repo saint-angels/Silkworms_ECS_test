@@ -13,7 +13,7 @@ public class GardenEntityAuthoring : MonoBehaviour, IConvertGameObjectToEntity
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
     {
         dstManager.AddComponentData(entity, new NeighboursWorm());
-        dstManager.AddComponentData(entity, new NeighboursLeaf());
+        dstManager.AddComponentData(entity, new NeighboursFood());
         dstManager.AddComponent<GridPosition>(entity);
         
         switch (entityType)
@@ -24,8 +24,8 @@ public class GardenEntityAuthoring : MonoBehaviour, IConvertGameObjectToEntity
             case EntityType.WORM:
                 dstManager.AddComponentData(entity, new Worm{ Value = 100});
                 break;
-            case EntityType.LEAF:
-                dstManager.AddComponentData(entity, new Leaf {Value = 100});
+            case EntityType.FOOD:
+                dstManager.AddComponentData(entity, new Food {Value = 100});
                 break;
         }
     }

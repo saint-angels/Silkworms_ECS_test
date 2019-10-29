@@ -6,5 +6,5 @@ public enum EntityType
 {
     EARTH,
     WORM,
-    LEAF
+    FOOD
 }

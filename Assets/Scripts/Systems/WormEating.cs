@@ -6,10 +6,10 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using static Unity.Mathematics.math;
 
-[UpdateBefore(typeof(LeafEating))]
-public class WormEating : EntityMorphingX<Worm, NeighboursLeaf>
-{
-    protected override EntityType targetEntityType => EntityType.EARTH;
-    protected override int Multiplier => 3;
-    
-}
+//[UpdateBefore(typeof(FoodEating))]
+//public class WormEating : EntityMorphingX<Worm, NeighboursFood>
+//{
+//    protected override EntityType targetEntityType => EntityType.EARTH;
+//    protected override int Multiplier => 3;
+//    
+//}

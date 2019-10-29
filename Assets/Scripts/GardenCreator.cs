@@ -35,25 +35,45 @@ public class GardenCreator : MonoBehaviour
 
     private EntityManager entityManager;
 
-    
-    
     private void Start()
     {
         entityManager = World.Active.EntityManager;
         
         Entity earthEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(earthPrefab, World.Active);
         Entity leafEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(leafPrefab, World.Active);
-        Entity wormEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(wormPrefab, World.Active);
+        Entity antEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(wormPrefab, World.Active);
 
-        var entityPrefabs = new RandomSelection[]
+        RandomSelection[] entityPrefabs = new RandomSelection[]
         {
-            new RandomSelection(earthEntityPrefab, .2f), 
+            new RandomSelection(earthEntityPrefab, .3f), 
             new RandomSelection(leafEntityPrefab, .7f), 
-            new RandomSelection(wormEntityPrefab, .1f) 
+//            new RandomSelection(antEntityPrefab, .1f) 
         };
+        
+        float3 startPoint = new float3(- (width / 2f) * cellScale, - (height / 2f) * cellScale, 0);
+        //Create ants
+        int antHomeRaidus = 5;
+
+        int homeCenterX = UnityEngine.Random.Range(0, width);
+        int homeCenterY = UnityEngine.Random.Range(0, height);
+
+        for (int x = homeCenterX - antHomeRaidus; x < homeCenterX + antHomeRaidus; x++)
+        {
+            for (int y = homeCenterY - antHomeRaidus; y < homeCenterY + antHomeRaidus; y++)
+            {
+                if (Mathf.Sqrt(Mathf.Pow(x - homeCenterX, 2) + Mathf.Pow(y - homeCenterY, 2)) < antHomeRaidus)
+                {
+                    float3 position = new float3(x * cellScale + startPoint.x, y * cellScale + startPoint.y, 0);
+
+                    Entity antEntityinstance = entityManager.Instantiate(antEntityPrefab);
+                    entityManager.SetComponentData(antEntityinstance, new GridPosition { Value = new int2(x, y)});
+                    entityManager.SetComponentData(antEntityinstance, new Translation {Value = position});
+                }
+            }
+        }
+        
 
         //Generate grid
-        float3 startPoint = new float3(- (width / 2f) * cellScale, - (height / 2f) * cellScale, 0);
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)

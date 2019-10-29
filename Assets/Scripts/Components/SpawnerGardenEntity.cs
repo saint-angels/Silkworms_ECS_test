@@ -32,7 +32,7 @@ public struct SpawnerGardenEntity : IComponentData
                 return prefabEarth;
             case EntityType.WORM:
                 return prefabWorm;
-            case EntityType.LEAF:
+            case EntityType.FOOD:
                 return prefabLeaf;
             default:
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);

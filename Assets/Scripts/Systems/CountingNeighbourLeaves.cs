@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CountingNeighbourLeaves : NeighbourCounting<NeighboursLeaf, Leaf>
+public class CountingNeighbourLeaves : NeighbourCounting<NeighboursFood, Food>
 {
 
 }
